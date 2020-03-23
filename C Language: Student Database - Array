@@ -1,0 +1,101 @@
+include <stdio.h>
+#include <stdlib.h>
+//10 Student database Static Memory
+char Database_intro(char new_location);
+
+//Creates the object student/ adds all the criteria to it.
+typedef struct student{
+char fname[25];
+char lname[25];
+int age;
+char jnumber[15];                 //JNumber or Unique ID number that starts with J
+float GPA;
+};
+
+struct student list[10];            //Shows max amount of students allowed in the list
+int i;
+
+
+int main()
+{
+//Initialzing variables
+    char location;
+    int main_menu_loop = 0;
+    char switchcase;
+    int temp;
+    int num;
+    int timer_case_b;
+
+
+while(1){
+    Database_intro(location);
+    scanf("%s", &location);
+        switch(location)
+    {
+        case 'A':                       //This case shows the amount of students you would like to enter into the database.
+        case 'a':
+            printf("How much students would you like to enter into the data base: ");
+            scanf("%d", &timer_case_b);
+
+            for (i = 0; i < timer_case_b; i++)              //For loop created to run through the struct students
+            {
+            printf("Enter first name: \n");                 //First name
+            scanf("%s", list[i].fname);
+            printf("Enter last name: \n");
+            scanf("%s", list[i].lname);                     //Last name
+            printf("Enter age: \n");
+            scanf("%d", &list[i].age);
+            printf("Enter students J number: \n");          //Student J number
+            scanf("%s", list[i].jnumber);
+            printf("Enter students GPA: \n");               //Students GPA
+            scanf("%f", &list[i].GPA);
+            printf("\n");
+            }
+        break;
+
+        case 'B':                   //Searches through the student database for the residents information
+        case 'b':
+            for (i = 0; i < 10; i++)                //Loop to query the whole list
+            {
+            printf("Name: %s %s", list[i].fname, list[i].lname);                //
+            printf("\tAge %d\tJ number %s\t\t", list[i].age, list[i].jnumber);
+            printf("GPA %.2f\n", list[i].GPA);
+            }
+        break;
+
+        case 'C':                   //If GPA is above 3.00 the student is printed
+        case 'c':
+
+            for(i = 0; i < 10; i++)                 //For loop if GPA is greater than 3.00
+            {
+                if(list[i].GPA > 3.00)
+                {
+                 printf("Name: %s %s GPA: %.2f\n", list[i].fname, list[i].lname, list[i].GPA);
+
+                }
+
+            }
+
+        default:
+            printf("\n\n***Program Terminated***\n\n");
+            return;
+        break;
+    }
+}
+
+    return 0;
+}
+
+
+//Function for introduction of code
+char Database_intro(char new_location)
+{
+    printf("Welcome to the online student roster\n");
+    printf("Please choose your options below\n");
+    printf("(A)\tEnter students into the classes\n");
+    printf("(B)\tSearch through class roster\n");
+    printf("(C)\tSee students with highest GPA\n");
+    printf("(C)\tExit class database\n");
+    printf("Please choose a search option: ");
+    return (new_location);
+}
