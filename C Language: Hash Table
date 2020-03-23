@@ -1,0 +1,205 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+//Node structure to hold the name and pointer
+typedef struct {
+    char name[100];
+    struct node *nextptr;
+}node;
+
+node *hashtable[1000];
+int HashSize = 5;
+
+//This takes the letters you enter and changes it into the ascii key
+int stringtokey(char name[])
+{
+    int c,s = 0;
+    //count the letters in name
+    for(int i = 0; i < strlen(name); i++)
+    {
+        //Sum of the Ascii for each character
+        c = name[i];
+        s = s + c;
+    }
+    return s;
+}
+
+void addnode()
+{
+    //declare Integers
+    int ascii, key;
+    //declare pointers of node
+    node *name1, *name2;
+    //Creating space for the node allocate memory
+    name1 = (node *)malloc(sizeof(node));
+    //have the user enter information about the node
+    printf("Please enter the name of the node\n");
+    //add name to node
+    scanf("%s", name1->name);
+    //Point the next pointer to NULL to end the list
+    name1->nextptr = NULL;
+
+    //Finds the value of name1-> name and hashes it into the table
+    ascii = stringtokey(name1->name);
+    key = ascii % HashSize;
+
+    printf("Hash Table: |[%d]|\n", key);
+    //This is the list inside of the hash table section
+    //If the hash is Null add
+    if(hashtable[key] == NULL)
+    {
+        hashtable[key] = name1;
+    }else{
+        //If the hash has a name go till null then add name.
+        for(name2 = hashtable[key]; name2->nextptr != NULL; name2 = name2->nextptr);
+        name2->nextptr = name1;
+    }
+}
+
+int searchnode(char name[])
+{
+    //Turn name into ascii
+    int ascii = stringtokey(name);
+    //Place the key into the hash table
+    int key = ascii % HashSize;
+    node *n;
+
+    for(n = hashtable[key]; n != NULL; n = n->nextptr)
+    {
+        //String compare the search name and name in the table
+        if(strcmp(n->name, name) ==0)
+        {
+            return key;
+        }
+    }
+    return -1;
+}
+
+void deletenode(char name[])
+{
+    printf("Delete node\n");
+    //Find the ascii count of the node being deleted
+    int ascii = stringtokey(name);
+    //Break down the key into the hash table
+    int key = ascii % HashSize;
+    node *n, n1;
+    //String compare the search name and name in the table
+    if( strcmp(hashtable[key]->name, name) ==0)
+    {
+        //make the hash table equal to the node
+        n = hashtable[key];
+        //make the key reach the next node in line
+        hashtable[key] = hashtable[key]->nextptr;
+        //delete old node and return memory back to the heap
+        free(n);
+        return;
+    }
+
+
+}
+//To print the list
+void printlist(node *n)
+{
+    node *n1;
+    //input n into temp node continue to run until the pointer is null
+    for(n1 = n; n1 != NULL; n1 = n1->nextptr)
+    {
+        printf("[%s]", n1->name);
+    }
+}
+
+//print loop
+void printhashtable()
+{
+    for(int i = 0; i < HashSize; i++)
+    {
+        printf("\nHash Table[%d]: ",  i);
+        printlist(hashtable[i]);
+    }
+
+}
+void user_input()
+{
+    printf("\nWelcome to the hash table\n"
+           "1->Add Node to list\n"
+           "2->Search a node in list\n"
+           "3->Delete a node in list\n"
+           "4->Print hash table\n"
+           "5->Exit hash table\n\n"
+           "Choose your Answer:\t"
+    );
+}
+
+
+
+int main()
+{
+    char Ename[100];
+    int CaseAct;
+    int key = 1;
+
+    //Setting the hash table to NULL.
+    for(int i = 0; i<HashSize; i++)
+    {
+        hashtable[i] = NULL;
+    }
+
+    while(1)
+    {
+        //function for the main menu
+        user_input();
+        scanf("%d", &CaseAct);
+        switch(CaseAct)
+        {
+            case 1:
+                addnode();
+                break;
+
+            case 2:
+                //Enter in node run in Search node function
+                printf("Node Name:\t");
+                scanf("%s", Ename);
+                key = searchnode(Ename);
+
+                //If the key came back -1 there is nothing in list
+                if(key == -1)
+                {
+                    printf("The node your looking for does not exist\n");
+                }else{
+                    printf("node exist in:\t");
+                    printf("\nHash Table[%d]: ",key);
+                    printlist(hashtable[key]);
+                }
+                break;
+
+            case 3:
+                //Enter the scanf and search through the function searchnode
+                printf("Node Name:\t");
+                scanf("%s", Ename);
+                key = searchnode(Ename);
+
+                //if the key comes back -1 the node doesnt exist
+                if(key == -1)
+                {
+                    printf("The node your looking for doesnt exist\n");
+                }else{
+                    //Run function through delete node
+                    deletenode(Ename);
+                }
+
+                break;
+            case 4:
+                printhashtable();
+                break;
+            default:
+                return;
+                break;
+
+                printf("Please choose another option:\t");
+                scanf("%s", &CaseAct);
+        }
+    }
+    return 0;
+}
