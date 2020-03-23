@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main(void)
+
+{
+    //This code is for the developers use, Shows the random number generated to help with testing
+    srand(time(NULL));                   //Used from time.h library
+    int r = rand() % 10 + 1;             //Int r is equal to the Random number generator
+    printf("Random number is %i\n",r);
+
+
+    //Actual Game
+    int guessing_num;                    //Int for human to enter a guess
+    printf("* * * * * The number above is the correct answer * * * * *\n");
+    printf("Welcome to the guessing game.\nI have picked a number between 1 and 10, can you guess it? \n\n");
+
+    int counting_num = 0;           //Counter to make sure you only get 3 tries
+    while (counting_num < 3) {
+        printf("Enter your guess: ");
+        scanf("%i", &guessing_num);             //If/ else statement to see if the guess is too high, low or correct
+        counting_num = counting_num + 1;
+        if (r == guessing_num)              //You are correct on the first try the program ends
+        {
+            printf("CORRECT! YOU WIN!\n");
+            return;                 //Since you win, end the project
+        }
+        else if (guessing_num < r)          //If guessing number is less then r loop again
+        {
+            printf("Sorry, that number is to low!\n");
+        }
+        else if (guessing_num > r)          //If guessing number is greater then r loop again
+        {
+            printf("Sorry, that number is to high!\n");
+        }
+    }
+
+    return 0;           //end program
+}
