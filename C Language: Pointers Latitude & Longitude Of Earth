@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+//#define M_PI = 3.14;
+
+double CalculateDistance(double,double,double,double);
+// * * * * * Declaration of the two new functions (nA and nC) * * * * *
+void (nA_fun)(double *a, double *b, double *c, double *d);
+void (nC_fun)(double *nC_pointer);
+
+
+int main(void){
+	printf("Distance: %f\n",CalculateDistance(40.458896, -73.985130, 41.825226, -71.418884));
+}
+
+// * * * * * FUNCTIONS * * * * *
+double CalculateDistance( double nLat1, double nLon1, double nLat2, double nLon2 )
+{
+	int nRadius = 3959; // Earth's radius in Kilometers
+	double nDLat = (nLat2 - nLat1) * (3.14/180);
+	double nDLon = (nLon2 - nLon1) * (3.14/180);
+	double nA = pow ( sin(nDLat/2), 2 ) + cos(nLat1) * cos(nLat2) * pow ( sin(nDLon/2), 2 );
+	double nC = 2 * atan2( sqrt(nA), sqrt( 1 - nA ));
+	double nD = nRadius * nC;
+
+// * * * * * NESTED FUNCTION FORMULAS * * * * *
+	nA_fun(&nDLat, &nLat1, &nLat2, &nDLon);
+	nC_fun(&nA);
+
+return nD; // Return our calculated distance
+
+
+
+}
+// * * * * * FUNCTION FORMULAS * * * * *
+void (nA_fun)(double *a, double *b, double *c, double *d){
+	double temp_a = *a;
+	double temp_b = *b;
+	double temp_c = *c;
+	double temp_d = *d;
+	double temp_answer = pow ( sin(temp_a/2), 2 ) + cos(temp_b) * cos(temp_c) * pow ( sin(temp_d/2), 2 );
+	printf("The nA is equal to: \t%f\n", temp_answer);
+}
+
+void (nC_fun)(double *nC_pointer){
+double temp_nC_pointer = *nC_pointer;
+	double	nC_fun_answer = 2 * atan2( sqrt(temp_nC_pointer), sqrt( 1 - temp_nC_pointer ));
+	printf("The nC is equal to: \t%f\n", nC_fun_answer);
+}
